@@ -1,0 +1,20 @@
+<?xml version="1.0"?>
+<package >
+  <metadata>
+    <id>IgnoresAccessChecksToGenerator</id>
+    <version>0.1.0</version>
+    <authors>aelij</authors>
+    <owners>aelij</owners>
+    <licenseUrl>https://github.com/aelij/IgnoresAccessChecksToGenerator/blob/master/LICENSE</licenseUrl>
+    <projectUrl>https://github.com/aelij/IgnoresAccessChecksToGenerator</projectUrl>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <description>Generates IgnoresAccessChecksTo attributes and reference assemblies to allow compile-time access to internals</description>
+    <releaseNotes></releaseNotes>
+    <copyright>Copyright 2017</copyright>
+    <tags>IgnoresAccessChecksToGenerator internals</tags>
+  </metadata>
+  <files>
+    <file src="IgnoresAccessChecksToGenerator.Tasks\bin\Release\netstandard1.3\*.dll" target="build" />
+    <file src="Build\**" target="build" />
+  </files>
+</package>

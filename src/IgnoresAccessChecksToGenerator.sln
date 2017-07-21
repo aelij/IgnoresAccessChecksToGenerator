@@ -1,0 +1,32 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 15
+VisualStudioVersion = 15.0.26430.16
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IgnoresAccessChecksToGenerator.Tasks", "IgnoresAccessChecksToGenerator.Tasks\IgnoresAccessChecksToGenerator.Tasks.csproj", "{FFFAEEE5-E216-442C-9162-168AD30F57F5}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Build", "Build", "{D43D3D13-84B1-4D21-8E36-52BED4056097}"
+	ProjectSection(SolutionItems) = preProject
+		Build\IgnoresAccessChecksToGenerator.targets = Build\IgnoresAccessChecksToGenerator.targets
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "NuGet", "NuGet", "{1CD3690D-3079-4F56-B140-036590665068}"
+	ProjectSection(SolutionItems) = preProject
+		IgnoresAccessChecksToGenerator.nuspec = IgnoresAccessChecksToGenerator.nuspec
+	EndProjectSection
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{FFFAEEE5-E216-442C-9162-168AD30F57F5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FFFAEEE5-E216-442C-9162-168AD30F57F5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FFFAEEE5-E216-442C-9162-168AD30F57F5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FFFAEEE5-E216-442C-9162-168AD30F57F5}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal

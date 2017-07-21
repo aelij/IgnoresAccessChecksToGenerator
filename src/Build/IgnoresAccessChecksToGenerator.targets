@@ -1,0 +1,12 @@
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+
+  <UsingTask AssemblyFile="IgnoresAccessChecksToGenerator.Tasks.dll" TaskName="IgnoresAccessChecksToGenerator.Tasks.PublicizeInternals" />
+ 
+ <Target Name="IgnoresAccessChecksToGenerator" AfterTargets="AfterResolveReferences">
+    <PublicizeInternals SourceReferences="@(ReferencePath)" AssemblyNames="$(InternalsAssemblyNames)">
+      <Output ItemName="ReferencePath" TaskParameter="TargetReferences" />
+      <Output ItemName="Compile" TaskParameter="GeneratedCodeFiles" />
+    </PublicizeInternals>
+  </Target>
+
+</Project>
