@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>netstandard1.3</TargetFramework>
+    <TargetFrameworks>netstandard1.3;net46</TargetFrameworks>
     <RestoreProjectStyle>PackageReference</RestoreProjectStyle>
   </PropertyGroup>
 
@@ -9,7 +9,7 @@
     <PackageReference Include="Mono.Cecil" Version="0.10.0-beta6" />
     <PackageReference Include="Microsoft.Build.Tasks.Core" Version="15.1.1012" />
   </ItemGroup>
-  
+
   <Target Name="CopyRefsTarget" AfterTargets="AfterBuild">
     <ItemGroup>
       <CopyRefs Include="@(ReferencePath)" Condition=" '%(Filename)' == 'Mono.Cecil' " />

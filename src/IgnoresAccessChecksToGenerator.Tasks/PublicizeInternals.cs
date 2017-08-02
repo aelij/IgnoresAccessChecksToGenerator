@@ -26,6 +26,9 @@ namespace IgnoresAccessChecksToGenerator.Tasks
         public ITaskItem[] TargetReferences { get; set; }
 
         [Output]
+        public ITaskItem[] RemovedReferences { get; set; }
+
+        [Output]
         public ITaskItem[] GeneratedCodeFiles { get; set; }
 
         public override bool Execute()
@@ -52,6 +55,9 @@ namespace IgnoresAccessChecksToGenerator.Tasks
                 _resolver.AddSearchDirectory(assemblyPath);
             }
 
+            var targetReferences = new List<ITaskItem>();
+            var removedReferences = new List<ITaskItem>();
+
             foreach (var assembly in SourceReferences)
             {
                 var assemblyPath = GetFullFilePath(assembly.ItemSpec);
@@ -71,11 +77,13 @@ namespace IgnoresAccessChecksToGenerator.Tasks
                         Log.LogMessageFromText("Publicized assembly already exists at " + targetAssemblyPath, MessageImportance.Low);
                     }
 
-                    assembly.ItemSpec = targetAssemblyPath;
+                    targetReferences.Add(new TaskItem(targetAssemblyPath));
+                    removedReferences.Add(assembly);
                 }
             }
 
-            TargetReferences = SourceReferences;
+            TargetReferences = targetReferences.ToArray();
+            RemovedReferences = removedReferences.ToArray();
 
             return true;
         }

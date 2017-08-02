@@ -1,12 +1,22 @@
 <Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
 
-  <UsingTask AssemblyFile="IgnoresAccessChecksToGenerator.Tasks.dll" TaskName="IgnoresAccessChecksToGenerator.Tasks.PublicizeInternals" />
- 
- <Target Name="IgnoresAccessChecksToGenerator" AfterTargets="AfterResolveReferences">
+  <PropertyGroup>
+    <IgnoresAccessChecksToGenerator_TFM Condition="'$(MSBuildRuntimeType)' == 'Core'">netstandard1.3</IgnoresAccessChecksToGenerator_TFM>
+    <IgnoresAccessChecksToGenerator_TFM Condition="'$(MSBuildRuntimeType)' != 'Core'">net46</IgnoresAccessChecksToGenerator_TFM>
+    <IgnoresAccessChecksToGenerator_TaskAssembly>$(MSBuildThisFileDirectory)..\tools\$(IgnoresAccessChecksToGenerator_TFM)\IgnoresAccessChecksToGenerator.Tasks.dll</IgnoresAccessChecksToGenerator_TaskAssembly>
+  </PropertyGroup>
+  
+  <UsingTask AssemblyFile="$(IgnoresAccessChecksToGenerator_TaskAssembly)" TaskName="IgnoresAccessChecksToGenerator.Tasks.PublicizeInternals" />
+
+  <Target Name="IgnoresAccessChecksToGenerator" AfterTargets="AfterResolveReferences">
     <PublicizeInternals SourceReferences="@(ReferencePath)" AssemblyNames="$(InternalsAssemblyNames)">
       <Output ItemName="ReferencePath" TaskParameter="TargetReferences" />
+      <Output ItemName="IgnoresAccessChecksToGenerator_RemovedReferences" TaskParameter="RemovedReferences" />
       <Output ItemName="Compile" TaskParameter="GeneratedCodeFiles" />
     </PublicizeInternals>
+    <ItemGroup>
+      <ReferencePath Remove="@(IgnoresAccessChecksToGenerator_RemovedReferences)" />
+    </ItemGroup>
   </Target>
 
 </Project>

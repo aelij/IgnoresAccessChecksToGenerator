@@ -2,7 +2,7 @@
 <package >
   <metadata>
     <id>IgnoresAccessChecksToGenerator</id>
-    <version>0.1.0</version>
+    <version>0.2.0</version>
     <authors>aelij</authors>
     <owners>aelij</owners>
     <licenseUrl>https://github.com/aelij/IgnoresAccessChecksToGenerator/blob/master/LICENSE</licenseUrl>
@@ -14,7 +14,8 @@
     <tags>IgnoresAccessChecksToGenerator internals</tags>
   </metadata>
   <files>
-    <file src="IgnoresAccessChecksToGenerator.Tasks\bin\Release\netstandard1.3\*.dll" target="build" />
+    <file src="IgnoresAccessChecksToGenerator.Tasks\bin\Release\**\*.dll" target="tools" />
+    <file src="IgnoresAccessChecksToGenerator.Tasks\bin\Release\**\*.deps.json" target="tools" />
     <file src="Build\**" target="build" />
   </files>
 </package>
