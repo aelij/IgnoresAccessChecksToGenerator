@@ -67,7 +67,8 @@ namespace IgnoresAccessChecksToGenerator.Tasks
                     // ReSharper disable once AssignNullToNotNullAttribute
                     var targetAssemblyPath = Path.Combine(targetPath, Path.GetFileName(assemblyPath));
 
-                    if (!File.Exists(targetAssemblyPath))
+                    var targetAsemblyFileInfo = new FileInfo(targetAssemblyPath);
+                    if (!targetAsemblyFileInfo.Exists || targetAsemblyFileInfo.Length == 0)
                     {
                         CreatePublicAssembly(assemblyPath, targetAssemblyPath);
                         Log.LogMessageFromText("Created publicized assembly at " + targetAssemblyPath, MessageImportance.Normal);
@@ -90,9 +91,9 @@ namespace IgnoresAccessChecksToGenerator.Tasks
 
         private void GenerateAttributes(string path, IEnumerable<string> assemblyNames)
         {
-            var attributes = string.Join(Environment.NewLine, 
+            var attributes = string.Join(Environment.NewLine,
                 assemblyNames.Select(a => $@"[assembly: System.Runtime.CompilerServices.IgnoresAccessChecksTo(""{a}"")]"));
-            
+
             var content = attributes + @"
 
 namespace System.Runtime.CompilerServices
@@ -120,20 +121,23 @@ namespace System.Runtime.CompilerServices
 
             foreach (var module in assembly.Modules)
             {
-                foreach (var type in module.Types)
+                foreach (var type in module.GetTypes())
                 {
-                    if (type.IsNestedAssembly ||
-                        type.IsNestedFamilyOrAssembly || 
-                        type.IsNestedFamilyAndAssembly ||
-                        (!type.IsNested && type.IsNotPublic))
+                    if (!type.IsNested && type.IsNotPublic)
                     {
                         type.IsPublic = true;
+                    }
+                    else if (type.IsNestedAssembly ||
+                             type.IsNestedFamilyOrAssembly ||
+                             type.IsNestedFamilyAndAssembly)
+                    {
+                        type.IsNestedPublic = true;
                     }
 
                     foreach (var field in type.Fields)
                     {
                         if (field.IsAssembly ||
-                            field.IsFamilyOrAssembly || 
+                            field.IsFamilyOrAssembly ||
                             field.IsFamilyAndAssembly)
                         {
                             field.IsPublic = true;
@@ -145,8 +149,8 @@ namespace System.Runtime.CompilerServices
                         method.Body?.Instructions?.Clear();
                         method.Body?.ExceptionHandlers?.Clear();
 
-                        if (method.IsAssembly || 
-                            method.IsFamilyOrAssembly || 
+                        if (method.IsAssembly ||
+                            method.IsFamilyOrAssembly ||
                             method.IsFamilyAndAssembly)
                         {
                             method.IsPublic = true;
@@ -190,7 +194,7 @@ namespace System.Runtime.CompilerServices
                 {
                     return assembly;
                 }
-                
+
                 throw new AssemblyResolutionException(name);
             }
 

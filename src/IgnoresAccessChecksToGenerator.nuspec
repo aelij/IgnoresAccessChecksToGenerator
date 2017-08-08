@@ -2,7 +2,7 @@
 <package >
   <metadata>
     <id>IgnoresAccessChecksToGenerator</id>
-    <version>0.2.0</version>
+    <version>0.3.0</version>
     <authors>aelij</authors>
     <owners>aelij</owners>
     <licenseUrl>https://github.com/aelij/IgnoresAccessChecksToGenerator/blob/master/LICENSE</licenseUrl>
