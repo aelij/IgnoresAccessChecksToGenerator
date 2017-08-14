@@ -18,7 +18,7 @@ Just add the package and define the `InternalsAssemblyNames` property with a sem
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="IgnoresAccessChecksToGenerator" Version="0.3.0" PrivateAssets="All" />
+    <PackageReference Include="IgnoresAccessChecksToGenerator" Version="0.4.0" PrivateAssets="All" />
   </ItemGroup>
 
 </Project>

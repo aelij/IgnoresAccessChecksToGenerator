@@ -12,7 +12,7 @@ namespace IgnoresAccessChecksToGenerator.Tasks
     {
         private static readonly char[] Semicolon = { ';' };
 
-        private readonly string _sourceDir = Directory.GetCurrentDirectory() + "\\";
+        private readonly string _sourceDir = Directory.GetCurrentDirectory();
 
         private readonly AssemblyResolver _resolver = new AssemblyResolver();
 
