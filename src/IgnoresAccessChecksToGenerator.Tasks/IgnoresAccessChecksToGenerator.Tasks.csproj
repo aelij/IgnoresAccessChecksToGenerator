@@ -1,12 +1,12 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFrameworks>netstandard1.3;net46</TargetFrameworks>
+    <TargetFrameworks>netstandard2.0;net46</TargetFrameworks>
     <RestoreProjectStyle>PackageReference</RestoreProjectStyle>
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Mono.Cecil" Version="0.10.0-beta6" />
+    <PackageReference Include="Mono.Cecil" Version="0.11.3" />
     <PackageReference Include="Microsoft.Build.Tasks.Core" Version="15.1.1012" />
   </ItemGroup>
 
