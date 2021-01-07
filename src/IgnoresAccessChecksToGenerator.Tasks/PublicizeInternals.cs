@@ -22,6 +22,8 @@ namespace IgnoresAccessChecksToGenerator.Tasks
         [Required]
         public string AssemblyNames { get; set; }
 
+        public string ExcludeTypeNames { get; set; }
+
         [Output]
         public ITaskItem[] TargetReferences { get; set; }
 
@@ -116,12 +118,14 @@ namespace System.Runtime.CompilerServices
 
         private void CreatePublicAssembly(string source, string target)
         {
+            var types = ExcludeTypeNames == null ? Array.Empty<string>() : ExcludeTypeNames.Split(Semicolon);
+
             var assembly = AssemblyDefinition.ReadAssembly(source,
                 new ReaderParameters { AssemblyResolver = _resolver });
 
             foreach (var module in assembly.Modules)
             {
-                foreach (var type in module.GetTypes())
+                foreach (var type in module.GetTypes().Where(type=>!types.Contains(type.FullName)))
                 {
                     if (!type.IsNested && type.IsNotPublic)
                     {
