@@ -24,6 +24,8 @@ namespace IgnoresAccessChecksToGenerator.Tasks
 
         public string ExcludeTypeNames { get; set; }
 
+        public bool UseEmptyMethodBodies { get; set; } = true;
+
         [Output]
         public ITaskItem[] TargetReferences { get; set; }
 
@@ -150,8 +152,13 @@ namespace System.Runtime.CompilerServices
 
                     foreach (var method in type.Methods)
                     {
-                        method.Body?.Instructions?.Clear();
-                        method.Body?.ExceptionHandlers?.Clear();
+                        if (UseEmptyMethodBodies && method.HasBody)
+                        {    
+                            var emptyBody = new Mono.Cecil.Cil.MethodBody(method);
+                            emptyBody.Instructions.Add(Mono.Cecil.Cil.Instruction.Create(Mono.Cecil.Cil.OpCodes.Ldnull));
+                            emptyBody.Instructions.Add(Mono.Cecil.Cil.Instruction.Create(Mono.Cecil.Cil.OpCodes.Throw));
+                            method.Body = emptyBody;
+                        }
 
                         if (method.IsAssembly ||
                             method.IsFamilyOrAssembly ||

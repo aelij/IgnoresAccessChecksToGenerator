@@ -23,3 +23,11 @@ Just add the package and define the `InternalsAssemblyNames` property with a sem
 
 </Project>
 ```
+
+By default, the build tasks replaces all method bodies with `throw null;`. To keep the original bodies, you can specify:
+
+```xml
+  <PropertyGroup>
+    <InternalsAssemblyUseEmptyMethodBodies>false</InternalsAssemblyUseEmptyMethodBodies>
+  </PropertyGroup>
+```
