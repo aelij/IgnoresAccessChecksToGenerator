@@ -1,7 +1,7 @@
 <Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
 
   <PropertyGroup>
-    <_IACTG_TFM Condition="'$(MSBuildRuntimeType)' == 'Core'">netstandard1.3</_IACTG_TFM>
+    <_IACTG_TFM Condition="'$(MSBuildRuntimeType)' == 'Core'">netstandard2.0</_IACTG_TFM>
     <_IACTG_TFM Condition="'$(MSBuildRuntimeType)' != 'Core'">net46</_IACTG_TFM>
     <_IACTG_TaskAssembly>$(MSBuildThisFileDirectory)..\tools\$(_IACTG_TFM)\IgnoresAccessChecksToGenerator.Tasks.dll</_IACTG_TaskAssembly>
   </PropertyGroup>
