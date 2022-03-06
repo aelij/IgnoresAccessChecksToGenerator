@@ -9,7 +9,12 @@
   <UsingTask AssemblyFile="$(_IACTG_TaskAssembly)" TaskName="IgnoresAccessChecksToGenerator.Tasks.PublicizeInternals" />
 
   <Target Name="IgnoresAccessChecksToGenerator" AfterTargets="AfterResolveReferences">
-    <PublicizeInternals SourceReferences="@(ReferencePath)" AssemblyNames="$(InternalsAssemblyNames)" ExcludeTypeNames="$(InternalsAssemblyExcludeTypeNames)" UseEmptyMethodBodies="$(InternalsAssemblyUseEmptyMethodBodies)">
+    <PublicizeInternals 
+      SourceReferences="@(ReferencePath)"
+      AssemblyNames="$(InternalsAssemblyNames)"
+      ExcludeTypeNames="$(InternalsAssemblyExcludeTypeNames)"
+      UseEmptyMethodBodies="$(InternalsAssemblyUseEmptyMethodBodies)"
+      IntermediateOutputDirectory="$(IntermediateOutputDirectory)">
       <Output ItemName="ReferencePath" TaskParameter="TargetReferences" />
       <Output ItemName="_IACTG_RemovedReferences" TaskParameter="RemovedReferences" />
       <Output ItemName="Compile" TaskParameter="GeneratedCodeFiles" />
