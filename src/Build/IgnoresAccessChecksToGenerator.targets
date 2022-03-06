@@ -14,7 +14,7 @@
       AssemblyNames="$(InternalsAssemblyNames)"
       ExcludeTypeNames="$(InternalsAssemblyExcludeTypeNames)"
       UseEmptyMethodBodies="$(InternalsAssemblyUseEmptyMethodBodies)"
-      IntermediateOutputDirectory="$(IntermediateOutputDirectory)">
+      IntermediateOutputDirectory="$(IntermediateOutputPath)">
       <Output ItemName="ReferencePath" TaskParameter="TargetReferences" />
       <Output ItemName="_IACTG_RemovedReferences" TaskParameter="RemovedReferences" />
       <Output ItemName="Compile" TaskParameter="GeneratedCodeFiles" />
