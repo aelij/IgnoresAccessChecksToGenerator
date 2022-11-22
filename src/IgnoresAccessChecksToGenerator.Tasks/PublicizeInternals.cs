@@ -12,8 +12,6 @@ namespace IgnoresAccessChecksToGenerator.Tasks
     {
         private static readonly char[] Semicolon = { ';' };
 
-        private readonly string _sourceDir = Directory.GetCurrentDirectory();
-
         private readonly AssemblyResolver _resolver = new AssemblyResolver();
 
         [Required]
@@ -21,6 +19,9 @@ namespace IgnoresAccessChecksToGenerator.Tasks
 
         [Required]
         public string AssemblyNames { get; set; }
+
+        [Required]
+        public string IntermediateOutputDirectory { get; set; }
 
         public string ExcludeTypeNames { get; set; }
 
@@ -48,7 +49,7 @@ namespace IgnoresAccessChecksToGenerator.Tasks
                 return true;
             }
 
-            var targetPath = Path.Combine(_sourceDir, "obj", "GeneratedPublicizedAssemblies");
+            var targetPath = Path.Combine(IntermediateOutputDirectory, "GeneratedPublicizedAssemblies");
             Directory.CreateDirectory(targetPath);
 
             GenerateAttributes(targetPath, assemblyNames);
@@ -175,11 +176,6 @@ namespace System.Runtime.CompilerServices
 
         private string GetFullFilePath(string path)
         {
-            if (!Path.IsPathRooted(path))
-            {
-                path = Path.Combine(_sourceDir, path);
-            }
-
             path = Path.GetFullPath(path);
             return path;
         }
