@@ -18,10 +18,10 @@ namespace IgnoresAccessChecksToGenerator.Tasks
         public ITaskItem[] SourceReferences { get; set; }
 
         [Required]
-        public string AssemblyNames { get; set; }
+        public ITaskItem[] AssemblyNames { get; set; }
 
         [Required]
-        public string IntermediateOutputDirectory { get; set; }
+        public string IntermediateOutputPath { get; set; }
 
         public string ExcludeTypeNames { get; set; }
 
@@ -40,22 +40,20 @@ namespace IgnoresAccessChecksToGenerator.Tasks
         {
             if (SourceReferences == null) throw new ArgumentNullException(nameof(SourceReferences));
 
-            var assemblyNames = new HashSet<string>(
-                (AssemblyNames ?? string.Empty).Split(Semicolon, StringSplitOptions.RemoveEmptyEntries),
-                StringComparer.OrdinalIgnoreCase);
+            var assemblyNames = new HashSet<string>(AssemblyNames.Select(t => t.ItemSpec), StringComparer.OrdinalIgnoreCase);
 
             if (assemblyNames.Count == 0)
             {
                 return true;
             }
 
-            var targetPath = Path.Combine(IntermediateOutputDirectory, "GeneratedPublicizedAssemblies");
+            var targetPath = IntermediateOutputPath;
             Directory.CreateDirectory(targetPath);
 
             GenerateAttributes(targetPath, assemblyNames);
 
             foreach (var assemblyPath in SourceReferences
-                .Select(a => Path.GetDirectoryName(GetFullFilePath(a.ItemSpec))))
+                .Select(a => Path.GetDirectoryName(GetFullFilePath(targetPath, a.ItemSpec))))
             {
                 _resolver.AddSearchDirectory(assemblyPath);
             }
@@ -65,7 +63,7 @@ namespace IgnoresAccessChecksToGenerator.Tasks
 
             foreach (var assembly in SourceReferences)
             {
-                var assemblyPath = GetFullFilePath(assembly.ItemSpec);
+                var assemblyPath = GetFullFilePath(targetPath, assembly.ItemSpec);
                 var assemblyName = Path.GetFileNameWithoutExtension(assemblyPath);
                 if (assemblyNames.Contains(assemblyName))
                 {
@@ -174,11 +172,8 @@ namespace System.Runtime.CompilerServices
             assembly.Write(target);
         }
 
-        private string GetFullFilePath(string path)
-        {
-            path = Path.GetFullPath(path);
-            return path;
-        }
+        private string GetFullFilePath(string basePath, string path) =>
+            Path.IsPathRooted(path) ? Path.GetFullPath(path) : Path.Combine(basePath, path);
 
         private class AssemblyResolver : IAssemblyResolver
         {

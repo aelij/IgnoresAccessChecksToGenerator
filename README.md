@@ -13,12 +13,13 @@ Just add the package and define the `InternalsAssemblyNames` property with a sem
 ```xml
 <Project Sdk="Microsoft.NET.Sdk">
 
-  <PropertyGroup>
-    <InternalsAssemblyNames>AssemblyToGrantAccessTo1;AssemblyToGrantAccessTo2</InternalsAssemblyNames>
-  </PropertyGroup>
+  <ItemGroup>
+    <InternalsAssemblyName Include="AssemblyToGrantAccessTo1" />
+    <InternalsAssemblyName Include="AssemblyToGrantAccessTo2" />
+  </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="IgnoresAccessChecksToGenerator" Version="0.4.0" PrivateAssets="All" />
+    <PackageReference Include="IgnoresAccessChecksToGenerator" Version="0.6.0" PrivateAssets="All" />
   </ItemGroup>
 
 </Project>

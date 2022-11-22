@@ -1,11 +1,15 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>netcoreapp3.1</TargetFramework>
+    <TargetFramework>net6.0</TargetFramework>
     <OutputType>Exe</OutputType>
-    <InternalsAssemblyNames>Microsoft.CodeAnalysis;Microsoft.CodeAnalysis.CSharp</InternalsAssemblyNames>
     <InternalsAssemblyUseEmptyMethodBodies>false</InternalsAssemblyUseEmptyMethodBodies>
   </PropertyGroup>
+
+  <ItemGroup>
+    <InternalsAssemblyName Include="Microsoft.CodeAnalysis" />
+    <InternalsAssemblyName Include="Microsoft.CodeAnalysis.CSharp" />
+  </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="IgnoresAccessChecksToGenerator" Version="0.5.0" PrivateAssets="all" />

@@ -2,7 +2,7 @@
 <package>
   <metadata>
     <id>IgnoresAccessChecksToGenerator</id>
-    <version>0.5.0</version>
+    <version>0.6.0</version>
     <authors>aelij</authors>
     <owners>aelij</owners>
     <license type="expression">MIT</license>
@@ -10,7 +10,7 @@
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <description>Generates IgnoresAccessChecksTo attributes and reference assemblies to allow compile-time access to internals</description>
     <releaseNotes></releaseNotes>
-    <copyright>Copyright 2021</copyright>
+    <copyright>Copyright 2022</copyright>
     <tags>IgnoresAccessChecksToGenerator internals</tags>
   </metadata>
   <files>
