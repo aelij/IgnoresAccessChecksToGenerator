@@ -8,7 +8,7 @@ Since there's currently no compiler support for this attribute (I've [submitted 
 
 ## Usage
 
-Just add the package and define the `InternalsAssemblyNames` property with a semicolon-delimited list of assemblies you need access to.
+Just add the package and define `InternalsAssemblyName` items with the assemblies you need access to.
 
 ```xml
 <Project Sdk="Microsoft.NET.Sdk">
