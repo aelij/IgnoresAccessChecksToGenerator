@@ -4,6 +4,9 @@
     <InternalsAssemblyName>
       <Visible>false</Visible>
     </InternalsAssemblyName>
+    <InternalsAssemblyExcludeTypeName>
+      <Visible>false</Visible>
+    </InternalsAssemblyExcludeTypeName>
   </ItemDefinitionGroup>
 
 </Project>

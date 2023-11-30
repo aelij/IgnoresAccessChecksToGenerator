@@ -1,25 +1,33 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFrameworks>netstandard2.0;net46</TargetFrameworks>
-    <RestoreProjectStyle>PackageReference</RestoreProjectStyle>
-    <NuspecFile>IgnoresAccessChecksToGenerator.nuspec</NuspecFile>
+    <TargetFrameworks>netstandard2.0;net462</TargetFrameworks>
+    <PackageId>IgnoresAccessChecksToGenerator</PackageId>
+    <Version>0.7.0</Version>
+    <DevelopmentDependency>true</DevelopmentDependency>
+    <Authors>Eli Arbel</Authors>
+    <RepositoryUrl>https://github.com/aelij/IgnoresAccessChecksToGenerator</RepositoryUrl>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <Description>Generates IgnoresAccessChecksTo attributes and reference assemblies to allow compile-time access to internals</Description>
+    <PackageTags>IgnoresAccessChecksToGenerator IgnoresAccessChecksTo IgnoresAccessChecksToAttribute internals</PackageTags>
+    <BuildOutputTargetFolder>tools/$(TargetFramework)</BuildOutputTargetFolder>
+    <SuppressDependenciesWhenPacking>true</SuppressDependenciesWhenPacking>
+    <TargetsForTfmSpecificBuildOutput>$(TargetsForTfmSpecificBuildOutput);IncludePackageDependencies</TargetsForTfmSpecificBuildOutput>
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Mono.Cecil" Version="0.11.3" />
-    <PackageReference Include="Microsoft.Build.Tasks.Core" Version="15.1.1012" />
-    <PackageReference Include="Microsoft.NETFramework.ReferenceAssemblies" Version="1.0.0">
-      <PrivateAssets>all</PrivateAssets>
-      <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
-    </PackageReference>
+    <Content Include="build\*" PackagePath="build" />
   </ItemGroup>
 
-  <Target Name="CopyRefsTarget" AfterTargets="AfterBuild">
+  <ItemGroup>
+    <PackageReference Include="Mono.Cecil" Version="0.11.5" />
+    <PackageReference Include="Microsoft.Build.Tasks.Core" Version="17.8.3" />
+  </ItemGroup>
+
+  <Target Name="IncludePackageDependencies">
     <ItemGroup>
-      <CopyRefs Include="@(ReferencePath)" Condition=" '%(Filename)' == 'Mono.Cecil' " />
+      <BuildOutputInPackage Include="@(ReferencePath)" Condition=" '%(Filename)' == 'Mono.Cecil' " />
     </ItemGroup>
-    <Copy SourceFiles="@(CopyRefs)" DestinationFolder="$(OutDir)" />
   </Target>
 
 </Project>
