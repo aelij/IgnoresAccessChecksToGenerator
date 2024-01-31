@@ -37,7 +37,11 @@ namespace IgnoresAccessChecksToGenerator.Tasks
                 return true;
             }
 
-            var excludedTypeNames = new HashSet<string>(AssemblyNames.Select(t => t.ItemSpec), StringComparer.OrdinalIgnoreCase);
+            var excludedTypeNames = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
+            if (ExcludeTypeNames != null)
+            {
+                excludedTypeNames = new HashSet<string>(ExcludeTypeNames.Select(t => t.ItemSpec), StringComparer.OrdinalIgnoreCase);
+            }
 
             var targetPath = IntermediateOutputPath;
             Directory.CreateDirectory(targetPath);
