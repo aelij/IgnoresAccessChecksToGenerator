@@ -87,7 +87,7 @@ namespace System.Runtime.CompilerServices
         }
     }
 }";
-            File.WriteAllText(GeneratedCodeFilePath, content);
+            File.WriteAllText(GeneratedCodeFilePath, content, System.Text.Encoding.UTF8);
 
             Log.LogMessageFromText("Generated IgnoresAccessChecksTo attributes", MessageImportance.Low);
         }
