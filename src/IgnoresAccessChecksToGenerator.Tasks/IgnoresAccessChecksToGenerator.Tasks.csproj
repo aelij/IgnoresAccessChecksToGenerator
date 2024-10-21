@@ -2,8 +2,9 @@
 
   <PropertyGroup>
     <TargetFrameworks>netstandard2.0;net462</TargetFrameworks>
+    <LangVersion>latest</LangVersion>
     <PackageId>IgnoresAccessChecksToGenerator</PackageId>
-    <Version>0.7.0</Version>
+    <Version>0.7.1</Version>
     <DevelopmentDependency>true</DevelopmentDependency>
     <Authors>Eli Arbel</Authors>
     <RepositoryUrl>https://github.com/aelij/IgnoresAccessChecksToGenerator</RepositoryUrl>
