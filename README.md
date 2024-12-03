@@ -20,7 +20,7 @@ Just add the package and define `InternalsAssemblyName` items with the assemblie
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="IgnoresAccessChecksToGenerator" Version="0.7.0" PrivateAssets="All" />
+    <PackageReference Include="IgnoresAccessChecksToGenerator" Version="0.8.0" PrivateAssets="All" />
   </ItemGroup>
 
 </Project>
