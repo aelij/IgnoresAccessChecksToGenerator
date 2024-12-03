@@ -7,6 +7,12 @@
     <InternalsAssemblyExcludeTypeName>
       <Visible>false</Visible>
     </InternalsAssemblyExcludeTypeName>
+    <IgnoresAccessChecksTo>
+      <Visible>false</Visible>
+    </IgnoresAccessChecksTo>
+    <IgnoresAccessChecksToExcludeTypeName>
+      <Visible>false</Visible>
+    </IgnoresAccessChecksToExcludeTypeName>
   </ItemDefinitionGroup>
 
 </Project>

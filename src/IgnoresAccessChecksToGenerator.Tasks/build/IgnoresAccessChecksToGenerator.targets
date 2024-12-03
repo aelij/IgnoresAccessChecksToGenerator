@@ -20,17 +20,20 @@
           Outputs="$(_IACTG_ManifestFilePath)"
           Returns="@(_IACTG_InputReferencePath);@(_IACTG_OutputReferencePath)">
     <ItemGroup>
-      <InternalsAssemblyName Include="$(InternalsAssemblyNames.Split(;))" />
-      <InternalsAssemblyExcludeTypeName Include="$(InternalsAssemblyExcludeTypeNames.Split(;))" />
+      <!-- legacy properties/items -->
+      <IgnoresAccessChecksTo Include="$(InternalsAssemblyNames.Split(;))" />
+      <IgnoresAccessChecksTo Include="@(InternalsAssemblyName)" />
+      <IgnoresAccessChecksToExcludeTypeName Include="$(InternalsAssemblyExcludeTypeNames.Split(;))" />
+      <IgnoresAccessChecksToExcludeTypeName Include="@(InternalsAssemblyExcludeTypeName)" />
     </ItemGroup>
     <ItemGroup>
-      <_IACTG_ReferencePathJoin Include="@(ReferencePath)" InternalsAssemblyName="%(InternalsAssemblyName.Identity)" />
-      <_IACTG_InputReferencePath Include="@(_IACTG_ReferencePathJoin)" Condition=" '%(Filename)' == '%(InternalsAssemblyName)' " />
+      <_IACTG_ReferencePathJoin Include="@(ReferencePath)" IgnoresAccessChecksTo="%(IgnoresAccessChecksTo.Identity)" />
+      <_IACTG_InputReferencePath Include="@(_IACTG_ReferencePathJoin)" Condition=" '%(Filename)' == '%(IgnoresAccessChecksTo)' " />
       <_IACTG_ReferencePathJoin Remove="@(_IACTG_ReferencePathJoin)" />
       <_IACTG_OutputReferencePath Include="@(_IACTG_InputReferencePath->'$(_IACTG_IntermediatePath)/%(Filename)%(Extension)')" OriginalItemSpec="%(Identity)" />
     </ItemGroup>
     <ItemGroup>
-      <_IACTG_Manifest Include="@(InternalsAssemblyExcludeTypeName)" />
+      <_IACTG_Manifest Include="@(IgnoresAccessChecksToExcludeTypeName)" />
     </ItemGroup>
     <WriteLinesToFile File="$(_IACTG_ManifestFilePath)" Lines="@(_IACTG_Manifest)" WriteOnlyWhenDifferent="true" Overwrite="true" />
   </Target>
@@ -42,8 +45,8 @@
           Outputs="@(_IACTG_OutputReferencePath);$(_IACTG_CodeFilePath)"
           Returns="@(ReferencePath);@(Compile)">
     <PublicizeInternals SourceReferences="@(ReferencePath)"
-                        AssemblyNames="@(InternalsAssemblyName)"
-                        ExcludeTypeNames="@(InternalsAssemblyExcludeTypeName)"
+                        AssemblyNames="@(IgnoresAccessChecksTo)"
+                        ExcludeTypeNames="@(IgnoresAccessChecksToExcludeTypeName)"
                         IntermediateOutputPath="$(_IACTG_IntermediatePath)"
                         GeneratedCodeFilePath="$(_IACTG_CodeFilePath)" />
     <ItemGroup>

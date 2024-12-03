@@ -3,13 +3,12 @@
   <PropertyGroup>
     <TargetFramework>net8.0</TargetFramework>
     <OutputType>Exe</OutputType>
-    <Axxx>true</Axxx>
   </PropertyGroup>
 
   <ItemGroup>
-    <InternalsAssemblyName Include="Microsoft.CodeAnalysis" />
-    <InternalsAssemblyName Include="Microsoft.CodeAnalysis.CSharp" />
-    <InternalsAssemblyExcludeTypeName Include="Microsoft.CodeAnalysis.CSharp.AccessCheck" />
+    <IgnoresAccessChecksTo Include="Microsoft.CodeAnalysis" />
+    <IgnoresAccessChecksTo Include="Microsoft.CodeAnalysis.CSharp" />
+    <IgnoresAccessChecksToExcludeTypeName Include="Microsoft.CodeAnalysis.CSharp.AccessCheck" />
   </ItemGroup>
 
   <ItemGroup>

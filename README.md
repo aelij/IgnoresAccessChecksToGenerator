@@ -14,9 +14,9 @@ Just add the package and define `InternalsAssemblyName` items with the assemblie
 <Project Sdk="Microsoft.NET.Sdk">
 
   <ItemGroup>
-    <InternalsAssemblyName Include="AssemblyToGrantAccessTo1" />
-    <InternalsAssemblyName Include="AssemblyToGrantAccessTo2" />
-    <InternalsAssemblyExcludeTypeName Include="Namespace.TypeName" />
+    <IgnoresAccessChecksTo Include="AssemblyToGrantAccessTo1" />
+    <IgnoresAccessChecksTo Include="AssemblyToGrantAccessTo2" />
+    <IgnoresAccessChecksToExcludeTypeName Include="Namespace.TypeName" />
   </ItemGroup>
 
   <ItemGroup>
