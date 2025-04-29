@@ -28,13 +28,9 @@ namespace IgnoresAccessChecksToGenerator.Tasks
 
         public override bool Execute()
         {
-            if (SourceReferences == null)
-                throw new ArgumentNullException(nameof(SourceReferences));
+            if (SourceReferences == null) throw new ArgumentNullException(nameof(SourceReferences));
 
-            var assemblyNames = new HashSet<string>(
-                AssemblyNames.Select(t => t.ItemSpec),
-                StringComparer.OrdinalIgnoreCase
-            );
+            var assemblyNames = new HashSet<string>(AssemblyNames.Select(t => t.ItemSpec), StringComparer.OrdinalIgnoreCase);
 
             if (assemblyNames.Count == 0)
             {
@@ -44,10 +40,7 @@ namespace IgnoresAccessChecksToGenerator.Tasks
             var excludedTypeNames = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
             if (ExcludeTypeNames != null)
             {
-                excludedTypeNames = new HashSet<string>(
-                    ExcludeTypeNames.Select(t => t.ItemSpec),
-                    StringComparer.OrdinalIgnoreCase
-                );
+                excludedTypeNames = new HashSet<string>(ExcludeTypeNames.Select(t => t.ItemSpec), StringComparer.OrdinalIgnoreCase);
             }
 
             var targetPath = IntermediateOutputPath;
@@ -55,11 +48,8 @@ namespace IgnoresAccessChecksToGenerator.Tasks
 
             GenerateAttributes(targetPath, assemblyNames);
 
-            foreach (
-                var assemblyPath in SourceReferences.Select(a =>
-                    Path.GetDirectoryName(GetFullFilePath(targetPath, a.ItemSpec))
-                )
-            )
+            foreach (var assemblyPath in SourceReferences
+                .Select(a => Path.GetDirectoryName(GetFullFilePath(targetPath, a.ItemSpec))))
             {
                 _resolver.AddSearchDirectory(assemblyPath);
             }
@@ -70,16 +60,10 @@ namespace IgnoresAccessChecksToGenerator.Tasks
                 var assemblyName = Path.GetFileNameWithoutExtension(assemblyPath);
                 if (assemblyNames.Contains(assemblyName))
                 {
-                    var targetAssemblyPath = Path.Combine(
-                        targetPath,
-                        Path.GetFileName(assemblyPath)
-                    );
+                    var targetAssemblyPath = Path.Combine(targetPath, Path.GetFileName(assemblyPath));
 
                     CreatePublicAssembly(assemblyPath, targetAssemblyPath, excludedTypeNames);
-                    Log.LogMessageFromText(
-                        "Created publicized assembly at " + targetAssemblyPath,
-                        MessageImportance.Normal
-                    );
+                    Log.LogMessageFromText("Created publicized assembly at " + targetAssemblyPath, MessageImportance.Normal);
                 }
             }
 
@@ -88,12 +72,8 @@ namespace IgnoresAccessChecksToGenerator.Tasks
 
         private void GenerateAttributes(string path, IEnumerable<string> assemblyNames)
         {
-            var attributes = string.Join(
-                Environment.NewLine,
-                assemblyNames.Select(a =>
-                    $@"[assembly: System.Runtime.CompilerServices.IgnoresAccessChecksTo(""{a}"")]"
-                )
-            );
+            var attributes = string.Join(Environment.NewLine,
+                assemblyNames.Select(a => $@"[assembly: System.Runtime.CompilerServices.IgnoresAccessChecksTo(""{a}"")]"));
 
             var content = $$"""
 //------------------------------------------------------------------------------
@@ -120,51 +100,34 @@ namespace System.Runtime.CompilerServices
 """;
             File.WriteAllText(GeneratedCodeFilePath, content, System.Text.Encoding.UTF8);
 
-            Log.LogMessageFromText(
-                "Generated IgnoresAccessChecksTo attributes",
-                MessageImportance.Low
-            );
+            Log.LogMessageFromText("Generated IgnoresAccessChecksTo attributes", MessageImportance.Low);
         }
 
-        private void CreatePublicAssembly(
-            string source,
-            string target,
-            HashSet<string> excludedTypeNames
-        )
+        private void CreatePublicAssembly(string source, string target, HashSet<string> excludedTypeNames)
         {
-            var assembly = AssemblyDefinition.ReadAssembly(
-                source,
-                new ReaderParameters { AssemblyResolver = _resolver }
-            );
+            var assembly = AssemblyDefinition.ReadAssembly(source,
+                new ReaderParameters { AssemblyResolver = _resolver });
 
             foreach (var module in assembly.Modules)
             {
-                foreach (
-                    var type in module
-                        .GetTypes()
-                        .Where(type => !excludedTypeNames.Contains(type.FullName))
-                )
+                foreach (var type in module.GetTypes().Where(type => !excludedTypeNames.Contains(type.FullName)))
                 {
                     if (!type.IsNested && type.IsNotPublic)
                     {
                         type.IsPublic = true;
                     }
-                    else if (
-                        type.IsNestedAssembly
-                        || type.IsNestedFamilyOrAssembly
-                        || type.IsNestedFamilyAndAssembly
-                    )
+                    else if (type.IsNestedAssembly ||
+                             type.IsNestedFamilyOrAssembly ||
+                             type.IsNestedFamilyAndAssembly)
                     {
                         type.IsNestedPublic = true;
                     }
 
                     foreach (var field in type.Fields)
                     {
-                        if (
-                            field.IsAssembly
-                            || field.IsFamilyOrAssembly
-                            || field.IsFamilyAndAssembly
-                        )
+                        if (field.IsAssembly ||
+                            field.IsFamilyOrAssembly ||
+                            field.IsFamilyAndAssembly)
                         {
                             field.IsPublic = true;
                         }
@@ -172,11 +135,9 @@ namespace System.Runtime.CompilerServices
 
                     foreach (var method in type.Methods)
                     {
-                        if (
-                            method.IsAssembly
-                            || method.IsFamilyOrAssembly
-                            || method.IsFamilyAndAssembly
-                        )
+                        if (method.IsAssembly ||
+                            method.IsFamilyOrAssembly ||
+                            method.IsFamilyAndAssembly)
                         {
                             method.IsPublic = true;
                         }
@@ -200,9 +161,7 @@ namespace System.Runtime.CompilerServices
 
         private class AssemblyResolver : IAssemblyResolver
         {
-            private readonly HashSet<string> _directories = new HashSet<string>(
-                StringComparer.OrdinalIgnoreCase
-            );
+            private readonly HashSet<string> _directories = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
 
             public void AddSearchDirectory(string directory)
             {
@@ -214,10 +173,7 @@ namespace System.Runtime.CompilerServices
                 return Resolve(name, new ReaderParameters());
             }
 
-            public AssemblyDefinition Resolve(
-                AssemblyNameReference name,
-                ReaderParameters parameters
-            )
+            public AssemblyDefinition Resolve(AssemblyNameReference name, ReaderParameters parameters)
             {
                 var assembly = SearchDirectory(name, _directories, parameters);
                 if (assembly != null)
@@ -228,17 +184,13 @@ namespace System.Runtime.CompilerServices
                 throw new AssemblyResolutionException(name);
             }
 
-            public void Dispose() { }
-
-            private AssemblyDefinition SearchDirectory(
-                AssemblyNameReference name,
-                IEnumerable<string> directories,
-                ReaderParameters parameters
-            )
+            public void Dispose()
             {
-                var extensions = name.IsWindowsRuntime
-                    ? new[] { ".winmd", ".dll" }
-                    : new[] { ".exe", ".dll" };
+            }
+
+            private AssemblyDefinition SearchDirectory(AssemblyNameReference name, IEnumerable<string> directories, ReaderParameters parameters)
+            {
+                var extensions = name.IsWindowsRuntime ? new[] { ".winmd", ".dll" } : new[] { ".exe", ".dll" };
                 foreach (var directory in directories)
                 {
                     foreach (var extension in extensions)
@@ -250,7 +202,9 @@ namespace System.Runtime.CompilerServices
                         {
                             return GetAssembly(file, parameters);
                         }
-                        catch (BadImageFormatException) { }
+                        catch (BadImageFormatException)
+                        {
+                        }
                     }
                 }
 
