@@ -146,6 +146,14 @@ namespace System.Runtime.CompilerServices
             }
 
             assembly.Write(target);
+            // copy XML docs alongside the new assembly
+            var xmlSource = Path.ChangeExtension(source, ".xml");
+            if (File.Exists(xmlSource))
+            {
+                var xmlTarget = Path.ChangeExtension(target, ".xml");
+                File.Copy(xmlSource, xmlTarget, overwrite: true);
+                Log.LogMessageFromText($"Copied XML docs to {xmlTarget}", MessageImportance.Low);
+            }
         }
 
         private string GetFullFilePath(string basePath, string path) =>
