@@ -25,3 +25,13 @@ Just add the package and define `IgnoresAccessChecksTo` items with the assemblie
 
 </Project>
 ```
+
+> [!Tip]
+>
+> If you want to ignore access checks to an assembly coming from a `ProjectReference` instead of a `PackageReference`, you'll need to set the `CompileUsingReferenceAssemblies` property to `false`.
+>
+> ```xml
+> <PropertyGroup>
+>   <CompileUsingReferenceAssemblies>false</CompileUsingReferenceAssemblies>
+> </PropertyGroup>
+> ```
