@@ -16,6 +16,6 @@ jobs:
     - name: Setup .NET
       uses: actions/setup-dotnet@v4
     - name: Restore dependencies
-      run: dotnet restore src
+      run: dotnet restore
     - name: Build
-      run: dotnet build src --no-restore
+      run: dotnet build --no-restore
