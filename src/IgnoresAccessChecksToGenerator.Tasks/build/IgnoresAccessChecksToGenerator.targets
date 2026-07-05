@@ -11,13 +11,7 @@
 
   <UsingTask AssemblyFile="$(_IACTG_TaskAssembly)" TaskName="IgnoresAccessChecksToGenerator.Tasks.PublicizeInternals" />
 
-  <!--
-    MSBuild incremental build tracking only supports files, so we create a manifest that contains all the items we use as inputs.
-    This target has MSBuildAllProjects as input which means it will be invalidated on any project file change.
-  -->
   <Target Name="GetIgnoresAccessChecksToGeneratorReferencePaths"
-          Inputs="$(MSBuildAllProjects)"
-          Outputs="$(_IACTG_ManifestFilePath)"
           Returns="@(_IACTG_InputReferencePath);@(_IACTG_OutputReferencePath)">
     <ItemGroup>
       <!-- legacy properties/items -->
@@ -33,7 +27,8 @@
       <_IACTG_OutputReferencePath Include="@(_IACTG_InputReferencePath->'$(_IACTG_IntermediatePath)/%(Filename)%(Extension)')" OriginalItemSpec="%(Identity)" />
     </ItemGroup>
     <ItemGroup>
-      <_IACTG_Manifest Include="@(IgnoresAccessChecksToExcludeTypeName)" />
+      <_IACTG_Manifest Include="@(IgnoresAccessChecksToExcludeTypeName->'%(Identity)^%(Assembly)')" />
+      <_IACTG_Manifest Include="@(_IACTG_InputReferencePath)" />
     </ItemGroup>
     <WriteLinesToFile File="$(_IACTG_ManifestFilePath)" Lines="@(_IACTG_Manifest)" WriteOnlyWhenDifferent="true" Overwrite="true" />
   </Target>
@@ -48,7 +43,8 @@
                         AssemblyNames="@(IgnoresAccessChecksTo)"
                         ExcludeTypeNames="@(IgnoresAccessChecksToExcludeTypeName)"
                         IntermediateOutputPath="$(_IACTG_IntermediatePath)"
-                        GeneratedCodeFilePath="$(_IACTG_CodeFilePath)" />
+                        GeneratedCodeFilePath="$(_IACTG_CodeFilePath)"
+                        OmitAttributeDefinition="$(IgnoresAccessChecksToOmitAttributeDefinition)" />
     <ItemGroup>
       <ReferencePath Include="@(_IACTG_OutputReferencePath)" />
       <ReferencePath Remove="@(_IACTG_OutputReferencePath->'%(OriginalItemSpec)')" />

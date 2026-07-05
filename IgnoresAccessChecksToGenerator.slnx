@@ -1,0 +1,8 @@
+<Solution>
+  <Folder Name="/src/">
+    <Project Path="src/IgnoresAccessChecksToGenerator.Tasks/IgnoresAccessChecksToGenerator.Tasks.csproj" />
+  </Folder>
+  <Folder Name="/test/">
+    <Project Path="test/IgnoresAccessChecksToGenerator.Tasks.Test/IgnoresAccessChecksToGenerator.Tasks.Test.csproj" />
+  </Folder>
+</Solution>

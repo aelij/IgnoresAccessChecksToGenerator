@@ -1,0 +1,7 @@
+<Project Sdk="MSTest.Sdk">
+
+  <ItemGroup>
+    <ProjectReference Include="../../src/IgnoresAccessChecksToGenerator.Tasks/IgnoresAccessChecksToGenerator.Tasks.csproj" />
+  </ItemGroup>
+
+</Project>

@@ -26,12 +26,59 @@ Just add the package and define `IgnoresAccessChecksTo` items with the assemblie
 </Project>
 ```
 
-> [!Tip]
->
-> If you want to ignore access checks to an assembly coming from a `ProjectReference` instead of a `PackageReference`, you'll need to set the `CompileUsingReferenceAssemblies` property to `false`.
->
-> ```xml
-> <PropertyGroup>
->   <CompileUsingReferenceAssemblies>false</CompileUsingReferenceAssemblies>
-> </PropertyGroup>
-> ```
+### Excluding types
+
+Use `IgnoresAccessChecksToExcludeTypeName` to keep specific types from being publicized. By default an exclusion applies to every assembly being processed. To scope an exclusion to a single assembly, add the `Assembly` metadata:
+
+```xml
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <ItemGroup>
+    <IgnoresAccessChecksTo Include="AssemblyToGrantAccessTo1" />
+    <IgnoresAccessChecksTo Include="AssemblyToGrantAccessTo2" />
+
+    <!-- Excluded from every processed assembly -->
+    <IgnoresAccessChecksToExcludeTypeName Include="Namespace.TypeName" />
+
+    <!-- Excluded only from AssemblyToGrantAccessTo1 -->
+    <IgnoresAccessChecksToExcludeTypeName Include="Namespace.OtherTypeName" Assembly="AssemblyToGrantAccessTo1" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="IgnoresAccessChecksToGenerator" Version="0.8.0" PrivateAssets="All" />
+  </ItemGroup>
+
+</Project>
+```
+
+### Omitting the attribute definition
+
+When set to `true`, the generator will not emit the `IgnoresAccessChecksToAttribute` class definition in the generated file. This is useful when you already have the attribute defined elsewhere in your project (for example, when multiple packages use the same attribute).
+
+```xml
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <IgnoresAccessChecksToOmitAttributeDefinition>true</IgnoresAccessChecksToOmitAttributeDefinition>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <IgnoresAccessChecksTo Include="AssemblyToGrantAccessTo" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="IgnoresAccessChecksToGenerator" Version="0.8.0" PrivateAssets="All" />
+  </ItemGroup>
+
+</Project>
+```
+
+### Using with project references
+
+If you want to ignore access checks to an assembly coming from a `ProjectReference` instead of a `PackageReference`, you'll need to set the `CompileUsingReferenceAssemblies` property to `false`.
+
+```xml
+<PropertyGroup>
+  <CompileUsingReferenceAssemblies>false</CompileUsingReferenceAssemblies>
+</PropertyGroup>
+```
