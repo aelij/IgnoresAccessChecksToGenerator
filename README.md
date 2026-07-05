@@ -25,3 +25,28 @@ Just add the package and define `IgnoresAccessChecksTo` items with the assemblie
 
 </Project>
 ```
+
+## MSBuild Properties
+
+### `IgnoresAccessChecksToOmitAttributeDefinition`
+
+When set to `true`, the generator will not emit the `IgnoresAccessChecksToAttribute` class definition in the generated file. This is useful when you already have the attribute defined elsewhere in your project (for example, when multiple packages use the same attribute).
+
+```xml
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <IgnoresAccessChecksToOmitAttributeDefinition>true</IgnoresAccessChecksToOmitAttributeDefinition>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <IgnoresAccessChecksTo Include="AssemblyToGrantAccessTo" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="IgnoresAccessChecksToGenerator" Version="0.8.0" PrivateAssets="All" />
+  </ItemGroup>
+
+</Project>
+```
+

@@ -48,7 +48,8 @@
                         AssemblyNames="@(IgnoresAccessChecksTo)"
                         ExcludeTypeNames="@(IgnoresAccessChecksToExcludeTypeName)"
                         IntermediateOutputPath="$(_IACTG_IntermediatePath)"
-                        GeneratedCodeFilePath="$(_IACTG_CodeFilePath)" />
+                        GeneratedCodeFilePath="$(_IACTG_CodeFilePath)"
+                        OmitAttributeDefinition="$(IgnoresAccessChecksToOmitAttributeDefinition)" />
     <ItemGroup>
       <ReferencePath Include="@(_IACTG_OutputReferencePath)" />
       <ReferencePath Remove="@(_IACTG_OutputReferencePath->'%(OriginalItemSpec)')" />
