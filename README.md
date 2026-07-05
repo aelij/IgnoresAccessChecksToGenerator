@@ -51,9 +51,7 @@ Use `IgnoresAccessChecksToExcludeTypeName` to keep specific types from being pub
 </Project>
 ```
 
-## MSBuild Properties
-
-### `IgnoresAccessChecksToOmitAttributeDefinition`
+### Omitting the attribute definition
 
 When set to `true`, the generator will not emit the `IgnoresAccessChecksToAttribute` class definition in the generated file. This is useful when you already have the attribute defined elsewhere in your project (for example, when multiple packages use the same attribute).
 
@@ -75,3 +73,12 @@ When set to `true`, the generator will not emit the `IgnoresAccessChecksToAttrib
 </Project>
 ```
 
+### Using with project references
+
+If you want to ignore access checks to an assembly coming from a `ProjectReference` instead of a `PackageReference`, you'll need to set the `CompileUsingReferenceAssemblies` property to `false`.
+
+```xml
+<PropertyGroup>
+  <CompileUsingReferenceAssemblies>false</CompileUsingReferenceAssemblies>
+</PropertyGroup>
+```
