@@ -1,17 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Runtime.CompilerServices;
+﻿using System.Runtime.CompilerServices;
 using Microsoft.Build.Framework;
-using Microsoft.Build.Utilities;
 using Mono.Cecil;
 
 [assembly: InternalsVisibleTo("IgnoresAccessChecksToGenerator.Tasks.Test")]
 
+#nullable disable
+
 namespace IgnoresAccessChecksToGenerator.Tasks
 {
-    public class PublicizeInternals : Task
+    public class PublicizeInternals : Microsoft.Build.Utilities.Task
     {
         private readonly AssemblyResolver _resolver = new AssemblyResolver();
 
@@ -42,10 +39,13 @@ namespace IgnoresAccessChecksToGenerator.Tasks
                 return true;
             }
 
-            var excludedTypeNames = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
+            var excludedTypeNames = new TypeExclusions();
             if (ExcludeTypeNames != null)
             {
-                excludedTypeNames = new HashSet<string>(ExcludeTypeNames.Select(t => t.ItemSpec), StringComparer.OrdinalIgnoreCase);
+                foreach (var item in ExcludeTypeNames)
+                {
+                    excludedTypeNames.Add(item.ItemSpec, item.GetMetadata("Assembly"));
+                }
             }
 
             var targetPath = IntermediateOutputPath;
@@ -67,7 +67,7 @@ namespace IgnoresAccessChecksToGenerator.Tasks
                 {
                     var targetAssemblyPath = Path.Combine(targetPath, Path.GetFileName(assemblyPath));
 
-                    CreatePublicAssembly(assemblyPath, targetAssemblyPath, excludedTypeNames);
+                    CreatePublicAssembly(assemblyName, assemblyPath, targetAssemblyPath, excludedTypeNames);
                     Log.LogMessageFromText("Created publicized assembly at " + targetAssemblyPath, MessageImportance.Normal);
                 }
             }
@@ -118,14 +118,14 @@ namespace System.Runtime.CompilerServices
             return content.TrimEnd() + Environment.NewLine;
         }
 
-        private void CreatePublicAssembly(string source, string target, HashSet<string> excludedTypeNames)
+        private void CreatePublicAssembly(string assemblyName, string source, string target, TypeExclusions excludedTypeNames)
         {
             var assembly = AssemblyDefinition.ReadAssembly(source,
                 new ReaderParameters { AssemblyResolver = _resolver });
 
             foreach (var module in assembly.Modules)
             {
-                foreach (var type in module.GetTypes().Where(type => !excludedTypeNames.Contains(type.FullName)))
+                foreach (var type in module.GetTypes().Where(type => !excludedTypeNames.IsExcluded(assemblyName, type.FullName)))
                 {
                     if (!type.IsNested && type.IsNotPublic)
                     {
@@ -173,6 +173,41 @@ namespace System.Runtime.CompilerServices
 
         private string GetFullFilePath(string basePath, string path) =>
             Path.IsPathRooted(path) ? Path.GetFullPath(path) : Path.Combine(basePath, path);
+
+        internal sealed class TypeExclusions
+        {
+            private readonly HashSet<string> _global = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
+            private readonly Dictionary<string, HashSet<string>> _perAssembly = new Dictionary<string, HashSet<string>>(StringComparer.OrdinalIgnoreCase);
+
+            public void Add(string typeName, string assemblyName)
+            {
+                if (string.IsNullOrEmpty(typeName))
+                {
+                    return;
+                }
+
+                if (string.IsNullOrEmpty(assemblyName))
+                {
+                    _global.Add(typeName);
+                }
+                else
+                {
+                    if (!_perAssembly.TryGetValue(assemblyName, out var set))
+                    {
+                        set = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
+                        _perAssembly[assemblyName] = set;
+                    }
+
+                    set.Add(typeName);
+                }
+            }
+
+            public bool IsExcluded(string assemblyName, string typeFullName)
+            {
+                return _global.Contains(typeFullName) ||
+                       (_perAssembly.TryGetValue(assemblyName, out var set) && set.Contains(typeFullName));
+            }
+        }
 
         private class AssemblyResolver : IAssemblyResolver
         {

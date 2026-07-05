@@ -26,6 +26,31 @@ Just add the package and define `IgnoresAccessChecksTo` items with the assemblie
 </Project>
 ```
 
+### Excluding types
+
+Use `IgnoresAccessChecksToExcludeTypeName` to keep specific types from being publicized. By default an exclusion applies to every assembly being processed. To scope an exclusion to a single assembly, add the `Assembly` metadata:
+
+```xml
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <ItemGroup>
+    <IgnoresAccessChecksTo Include="AssemblyToGrantAccessTo1" />
+    <IgnoresAccessChecksTo Include="AssemblyToGrantAccessTo2" />
+
+    <!-- Excluded from every processed assembly -->
+    <IgnoresAccessChecksToExcludeTypeName Include="Namespace.TypeName" />
+
+    <!-- Excluded only from AssemblyToGrantAccessTo1 -->
+    <IgnoresAccessChecksToExcludeTypeName Include="Namespace.OtherTypeName" Assembly="AssemblyToGrantAccessTo1" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="IgnoresAccessChecksToGenerator" Version="0.8.0" PrivateAssets="All" />
+  </ItemGroup>
+
+</Project>
+```
+
 ## MSBuild Properties
 
 ### `IgnoresAccessChecksToOmitAttributeDefinition`

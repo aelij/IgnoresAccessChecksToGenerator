@@ -1,13 +1,5 @@
 <Project Sdk="MSTest.Sdk">
 
-  <PropertyGroup>
-    <TargetFramework>net9.0</TargetFramework>
-    <ImplicitUsings>enable</ImplicitUsings>
-    <Nullable>enable</Nullable>
-
-    <IsPackable>false</IsPackable>
-  </PropertyGroup>
-
   <ItemGroup>
     <ProjectReference Include="../../src/IgnoresAccessChecksToGenerator.Tasks/IgnoresAccessChecksToGenerator.Tasks.csproj" />
   </ItemGroup>
